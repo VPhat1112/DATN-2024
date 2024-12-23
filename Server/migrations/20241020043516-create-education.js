@@ -9,17 +9,30 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      cv_id: {
-        type: Sequelize.INTEGER
+      seeker_id: {
+        type: Sequelize.INTEGER,
+        allowNull:false,
+        onDelete : 'CASCADE',
+        onUpdate: 'CASCADE',
+        references:{
+          model:'seekers',
+          key:'id'
+        }
       },
       Education_name: {
         type: Sequelize.STRING
       },
-      Education_yearFirst: {
-        type: Sequelize.INTEGER
+      degree: {
+        type: Sequelize.STRING
       },
-      Education_yearLast: {
-        type: Sequelize.INTEGER
+      major: {
+        type: Sequelize.STRING
+      },
+      university: {
+        type: Sequelize.STRING
+      },
+      graduation_date: {
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,

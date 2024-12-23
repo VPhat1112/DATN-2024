@@ -14,13 +14,20 @@ module.exports = (sequelize, DataTypes) => {
       cv.belongsTo(models.seeker,{
         foreignKey:"seeker_id",
         as:"seeker"
-      })
+      });
+      cv.hasMany(models.ApplyCv,{
+        foreignKey:"cv_id",
+        as:"applyCV"
+      });
     }
   }
   cv.init({
     seeker_id: DataTypes.INTEGER,
     Type_cv: DataTypes.STRING,
-    Career_goal: DataTypes.STRING
+    Career_goal: DataTypes.STRING,
+    title:DataTypes.STRING,
+    sumary:DataTypes.STRING,
+    color:DataTypes.STRING
   }, {
     sequelize,
     modelName: 'cv',

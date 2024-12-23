@@ -30,7 +30,8 @@ module.exports = (sequelize, DataTypes) => {
     Address: DataTypes.STRING,
     Company_description: DataTypes.STRING,
     contactPerson: DataTypes.STRING,
-    phoneContact: DataTypes.STRING
+    phoneContact: DataTypes.STRING,
+    image: DataTypes.TEXT('long')
   }, {
     sequelize,
     modelName: 'Company',

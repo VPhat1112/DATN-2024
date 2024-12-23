@@ -28,16 +28,15 @@ function NavBar(props) {
                 <a class="nav-link" href="#">Tìm việc làm</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                 </li>
             </ul>
             <form class="d-flex" >
-                {currentUser?<span className='me-2 mb-2 mb-lg-0 txt-user'>{currentUser?.firstName+currentUser?.lastName}</span>:<span className='me-2 mb-2 mb-lg-0 txt-user'><Link className='link' to={"/LoginSeeker"}>Đăng nhập</Link></span>}
+                {currentUser?<span className='me-2 mb-2 mb-lg-0 txt-user'><a href='/Profile/MyCv'>{currentUser?.seeker.firstname+currentUser?.seeker.lastname}</a></span>:<span className='me-2 mb-2 mb-lg-0 txt-user'><Link className='link' to={"/LoginSeeker"}>Đăng nhập</Link></span>}
                 {currentUser?<span onClick={logoutUSer} className='me-2 mb-2 mb-lg-0 txt-user'><Link>Logout</Link></span>:<span className='me-2 mb-2 mb-lg-0 txt-user'><Link className='link' to={"/SignUpSeeker"}>Đăng ký</Link></span>}
                 
                 
                 <div className='main-employer me-2'>
-                    <a href='/LoginEmployer' title='Đăng tuyển , tìm ứng viên'>
+                    <a href='/LoginEmployer' onClick={logoutUSer} title='Đăng tuyển , tìm ứng viên'>
                         <div>
                             <div className='bck-employer'>
                                 Dành cho nhà tuyển dụng

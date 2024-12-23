@@ -14,17 +14,25 @@ module.exports = (sequelize, DataTypes) => {
       news.belongsTo(models.Company,{
         foreignKey:"Company_id",
         as:"Company"
-      })
-      news.hasOne(models.newsDetail,{
-        foreignKey:"newDetail_id",
-        targetKey:"newDetail_id"
-      })
+      });
+
+      news.hasMany(models.ApplyCv,{
+        foreignKey:"cv_id",
+        as:"ApplyNews"
+      });
+
+      news.hasMany(models.new_spe,{foreignKey:'newsId',as:'spe'})
+
+      news.hasOne(models.NewDetail,{
+        foreignKey:"new_id",
+        targetKey:"new_id"
+      });
     }
   }
   news.init({
     Company_id: DataTypes.INTEGER,
     Job_name: DataTypes.STRING,
-    number_CV: DataTypes.INTEGER,
+    numberCV: DataTypes.INTEGER,
     date_expiration: DataTypes.DATE
   }, {
     sequelize,

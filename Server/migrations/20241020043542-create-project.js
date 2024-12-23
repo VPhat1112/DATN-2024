@@ -9,14 +9,30 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      cv_id: {
-        type: Sequelize.INTEGER
+      seeker_id: {
+        type: Sequelize.INTEGER,
+        allowNull:false,
+        onDelete : 'CASCADE',
+        onUpdate: 'CASCADE',
+        references:{
+          model:'seekers',
+          key:'id'
+        }
       },
       Project_name: {
         type: Sequelize.STRING
       },
+      description: {
+        type: Sequelize.STRING
+      },
       Project_git: {
         type: Sequelize.STRING
+      },
+      start_date: {
+        type: Sequelize.DATE
+      },
+      end_date: {
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,

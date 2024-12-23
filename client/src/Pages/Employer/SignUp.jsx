@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from "../../axios";
 import {Link, useNavigate}   from "react-router-dom";
 import Swal from "sweetalert2";
+import './SignUp.css'
 function SignUp(props) {
     const[inputs,setInputs]=useState({
         email:"",
@@ -15,34 +16,84 @@ function SignUp(props) {
         Company_description:"",
         contactPerson:"",
         phoneContact:"",
+        image:null
     })
-    const [err,setError] = useState(null)
+
+    const navigate = useNavigate()
+    const [checkRule,setCheckRule] = useState(false);
+
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [isImage, setIsImage] = useState(false);
+    const [hasError, setHasError] = useState(false);
+    
 
     const handleChange = e =>{
         setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     } 
+    const handleChangeImage = e =>{
+        const data = new FileReader()
+
+        
+        data.onload = () => {
+            setIsImage(true);
+            setInputs((prev) => ({ ...prev, image: data.result })); // Update image in state
+            setSelectedFile(true);
+        };
+
+        data.onerror = () => {
+            setIsImage(false);
+            setSelectedFile(false);
+            console.error('File is not a valid image');
+        };
+        
+        data.readAsDataURL(e.target.files[0])
+    }
+
+    const handleCheckRule = e =>{
+        setCheckRule(e.target.checked);
+        setHasError(e.target.checked);
+    }
+
+    const [err,setError] = useState(null)
 
     console.log(inputs)
 
     const handleSubmitSignUpEml = async (e) =>{
         e.preventDefault();
         try {
+
+            if (!selectedFile) {
+                Swal.fire('Lỗi!', 'Xin hãy chọn ảnh đai diện cho công ty.', 'error');
+                setLoading(false);
+                return;
+            }
+        
+            if (!isImage) {
+                Swal.fire('Lỗi!', 'Đây không phải là loại hình ảnh .', 'error');
+                setLoading(false);
+                return;
+            }
+        
+
             if(inputs.Passwords!=inputs.CheckPasword){
-                Swal.fire("Oops!", "Xác nhận mật khẩu không trùng khớp", "error");
+                Swal.fire("Lỗi!", "Xác nhận mật khẩu không trùng khớp", "error");
                 setLoading(false)
+                return;
             }else{
                 const res = await axios.post("/user/registerCompany",inputs)
-                navigate('/HomeEmployer')
-                
+                if (res.data.err==0){
+                    Swal.fire("Đăng ký thành công!", "Bạn đã đăng ký thành công là 1 nhà tuyển dụng. Hãy kiểm tra mail để xác nhận đăng ký :P", "success")
+                    .then(() => {
+                        navigate("/LoginEmployer");
+                        setLoading(true);
+                    });
+                }
             }
-            
-
         } catch (error) {
+            console.log(error)
             Swal.fire("Oops!", error.response.data, "error");
             setLoading(false)
         }
-        
-        
     }
 
 
@@ -53,7 +104,9 @@ function SignUp(props) {
             <hr/>
             <div class="col-md "> 
                 <label for="validationServer01" class="form-label">Email</label>
-                <input name='email' onChange={handleChange} type="text" class="form-control "  required/>
+                <input name='email' onChange={handleChange} type="text" 
+                class="form-control " 
+                required/>
                 
             </div>
             <div class="col-md">
@@ -76,7 +129,7 @@ function SignUp(props) {
             </div>
             <div class="col-12">
                 <label for="inputTypeCompany" class="form-label">loại hình công ty</label>
-                <select  name='typeCompany' defaultValue={"100% vốn nước ngoài"} onChange={handleChange} id="inputTypeCompany" class="form-select">
+                <select  name='typeCompany' defaultValue={"Vui lòng chọn"} onChange={handleChange} id="inputTypeCompany" class="form-select">
                     <option selected>Vui lòng chọn</option>
                     <option value="100% vốn nước ngoài">100% vốn nước ngoài</option>
                     <option value="Cá nhân">Cá nhân</option>
@@ -89,7 +142,7 @@ function SignUp(props) {
             </div>
             <div class="col-12">
                 <label for="inputNumberEml" class="form-label">Chọn số nhân viên</label>
-                <select id="inputNumberEml" class="form-select" name='numberEmployees' defaultValue={"Ít hơn 10"} onChange={handleChange}>
+                <select id="inputNumberEml" class="form-select" name='numberEmployees' defaultValue={"Chọn số nhân viên"} onChange={handleChange}>
                     <option selected>Chọn số nhân viên</option>
                     <option value="Ít hơn 10">Ít hơn 10</option>
                     <option value="10-20">10-20</option>
@@ -102,7 +155,7 @@ function SignUp(props) {
             </div>
             <div class="col-12">
                 <label for="inputNational" class="form-label">Chọn Quốc gia</label>
-                <select id="inputNational" class="form-select" name='National' defaultValue={"Việt Nam"} onChange={handleChange}>
+                <select id="inputNational" class="form-select" name='National' defaultValue={"Vui lòng chọn quốc gia"} onChange={handleChange}>
                     <option selected>Vui lòng chọn quốc gia</option>
                     <option value="Việt Nam">Việt Nam</option>
                     <option value="Nhật Bản">Nhật Bản</option>
@@ -117,7 +170,7 @@ function SignUp(props) {
             </div>
             <div class="col-12">
                 <label for="validationServer02" class="form-label">Sơ lược công ty </label>
-                <input name='Company_description' onChange={handleChange} type="text" class="form-control "  required/>
+                <textarea name='Company_description' onChange={handleChange} type="text" class="form-control "  required/>
             </div>
             <div class="col-12">
                 <label for="validationServer02" class="form-label">Tên người liên hệ</label>
@@ -127,20 +180,39 @@ function SignUp(props) {
                 <label for="validationServer02" class="form-label">Số điện thoại người liên hệ</label>
                 <input name='phoneContact' onChange={handleChange} type="text" class="form-control "  required/>
             </div>
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Ảnh đại diện công ty</label>
+                <input class="form-control" type="file" id="formFile" onChange={handleChangeImage} required/>
+                {inputs.image?<img src={inputs.image} class="img-thumbnail" alt="..."/>:<></>}
+            </div>
             <div class="col-12">
                 <div class="form-check">
-                <input class="form-check-input is-invalid" type="checkbox" value="" id="invalidCheck3" aria-describedby="invalidCheck3Feedback" required/>
+                <input class={`form-check-input ${hasError ? '' : 'is-invalid'}`} 
+                    type="checkbox"  
+                    onClick={handleCheckRule} 
+                    value="" id="validCheck3" 
+                    aria-describedby="invalidCheck3Feedback" 
+                    required/>
                 <label class="form-check-label" for="invalidCheck3">
                     Agree to terms and conditions
                 </label>
-                <div id="invalidCheck3Feedback" class="invalid-feedback">
-                    You must agree before submitting.
-                </div>
+                {
+                    checkRule? <></>: <div id="invalidCheck3Feedback" class="invalid-feedback">
+                                    You must agree before submitting.
+                                </div>
+                }
+                
                 </div>
                 {err && <p className="text-center text-danger">{err}</p>}
             </div>
             <div class="col-12">
                 <button onClick={handleSubmitSignUpEml} class="btn btn-primary" type="submit">Submit form</button>
+            </div>
+
+            <div class="mb-3">
+                <span className="text-center">
+                    Do you have a account? <Link to={"/LoginEmployer"}> Login </Link>
+                </span>
             </div>
         </form>
     );

@@ -1,113 +1,126 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { apiJob, apiJobBySpe } from '../../api/job';
+import { formatDate } from '../../../Utils/dateUtils';
+import { apiAllSpe } from '../../api/Admin';
 
+function Home() {
+    const [Jobs,setJobs] = useState([]);
+    const [Specia,setSpecia] = useState([]);
+    const[InforCompany,setInforCompany] = useState([]);
 
-function Home(props) {
+    const navigate = useNavigate()
 
-    const Jobs=[
-        {
-            id:1,
-            Job_name:'Nhân viên kho - Bắc Giang',
-            date_expiration:'26-10-2024',
-            image_company:'https://images.careerviet.vn/employer_folders/lot1/312911/155x155/95342ynghialogo.png',
-            nameCompany:'Công Ty Cổ Phần Thép Việt Xô Hà Nội',
-            newDetail:{
-                newDetail_id:1,
-                Address:'Bắc Giang',
-                typeJob:'Làm việc trực tiếp',
-                Salary:'8tr-10tr VND',
-                experience:'0 year',
-                jobLevel:'no',
-                Welfare:'Chế độ bảo hiểm, Phụ cấp, Chế độ thưởng',
-                job_description:'Trông coi và vận chuyển làm việc trong kho ',
-                job_requirements:'',
-                another_information:'',
-                updateAt:'27-10-2024'
-            }
-        },
-        {
-            id:2,
-            Job_name:'Nhân viên kho - Bắc Cạn',
-            date_expiration:'26-10-2024',
-            image_company:'https://images.careerviet.vn/employer_folders/lot9/320489/155x155/115346logo-nvl.jpg',
-            nameCompany:'Công Ty Cổ Phần Thép Việt Xô Hà Nội',
-            newDetail:{
-                newDetail_id:1,
-                Address:'Bắc Giang',
-                typeJob:'Làm việc trực tiếp',
-                Salary:'10tr-12tr VND',
-                experience:'0 year',
-                jobLevel:'no',
-                Welfare:'Chế độ bảo hiểm, Phụ cấp, Chế độ thưởng',
-                job_description:'Trông coi và vận chuyển làm việc trong kho ',
-                job_requirements:'',
-                another_information:'',
-                updateAt:'27-10-2024'
-            }
+    // const [Sid,setSid] = useState('');
+
+    const [input,setinput] =useState({
+        nameCompany:''
+    });
+
+    const fetchDataSpe = async() =>{
+        try {
+            const res = await apiAllSpe();
+            setSpecia(res.data.response);
+        } catch (error) {
+            console.log(error)
         }
-    ]
+    }
 
 
+    const handelChange = async(e) =>{
+        // e.preventDefault();
+        // console.log(e)
+        try {
+            const res = await apiJobBySpe(e);
+            setJobs(res.data.jobData);
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+    const handelChangeFilter = e =>{
+        e.preventDefault();
+        setinput((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+
+    }  
+
+
+    const navigateDetail = (jid) =>{
+        navigate(`/JobDetail/${jid}`)
+    }
+    
+
+
+
+
+    useEffect(()=>{
+        const fetchDataJob = async () =>{
+            try {
+                const res = await apiJob({});
+                setJobs(res.data.jobData);
+                // console.log(res.data.jobData)
+            } catch (error) {
+                console.log(error)
+            }
+        };
+        fetchDataSpe();
+        fetchDataJob();
+    },[])
+
+console.log(Jobs)
     return (
         <div>
             <div class="search-bar">
-                <input type="text" placeholder="Ngành nghề"/>
-                <input type="text" placeholder="Cấp bậc"/>
-                <button><i class="fa fa-search"></i></button>
+                
+                <select  onChange={e=>{handelChange(e.target.value)}} defaultValue={"Ngành nghề"}  id="inputTypeCompany" class="form-select">
+                    <option selected>Vui lòng chọn</option>
+                    {Specia.map(spe=>(
+                        <>
+                            <option value={spe.id}>{spe.Specialized_name}</option>
+                        </>
+                    ))}
+                    <option value={1}>test</option>
+                </select>
+                <input type="text" onChange={handelChangeFilter} placeholder="Tên, chức danh công ty"/>
+                <button><i class="bi bi-search"></i></button>
             </div>
 
             <div className='home'>
                 <div className='jobs'>
                     {Jobs.map(job=>(
-                        <div className='job'>
-                            <div class="img-job">
-                                <img src={job.image_company} alt="Company Logo"/>
+                        <>
+                            <div className='job'>
+                                <div class="img-job">
+                                    <a onClick={()=>navigateDetail(job.id)}><img src={job.Company.image}  alt="Company Logo"/></a>
+                                </div>
+                                <div className='content'>
+                                    <Link className='link' to={`/JobDetail/${job.id}`}><h3>{job.Job_name}</h3></Link>
+                                    <p onClick={()=>navigateDetail(job.id)}>{job.Company.nameCompany}</p>
+                                    <p>Lương: {job.NewDetail.Salary} VND</p>
+                                    <p>Địa điểm: {job.NewDetail.Address}</p>
+                                    <p>Hạn nộp: {formatDate(job.date_expiration)}</p>
+                                    <p>Phúc lợi: {job.NewDetail.Welfare}</p>
+                                    <p>Cập nhật: {formatDate(job.NewDetail.updatedAt)}</p>
+                                    <button>Lưu việc làm</button>
+                                </div>
                             </div>
-                            <div className='content'>
-                                <Link className='link' to={job.id}><h3>{job.Job_name}</h3></Link>
-                                <p>{job.nameCompany}</p>
-                                <p>Lương:{job.newDetail.Salary}</p>
-                                <p>Địa điểm:{job.newDetail.Address}</p>
-                                <p>Hạn nộp: {job.date_expiration}</p>
-                                <p>Phúc lợi: {job.newDetail.Welfare}</p>
-                                <p>Cập nhật: {job.newDetail.updateAt}</p>
-                                <button>Lưu việc làm</button>
-                            </div>
-                        </div>
-                        
-                        
-                        
+                        </>
                     ))
 
                     }
                 </div>
 
             </div>
+            <div className=''>
 
-    {/* <div class="job-listings">
-        <h2>50 việc làm theo ngày cập nhật mới nhất</h2>
-
-        {Jobs.map(job=>(
-                <div class="job-listing">
-                
-                <div class="job-logo">
-                    <img src={job.image_company} alt="Company Logo"/>
-                </div>
-                <div class="job-info">
-                <Link className='link' to={job.id}><h3>{job.Job_name}</h3></Link>
-                    <p>{job.nameCompany}</p>
-                    <p>Lương:{job.newDetail.Salary}</p>
-                    <p>Địa điểm:{job.newDetail.Address}</p>
-                    <p>Hạn nộp: {job.date_expiration}</p>
-                    <p>Phúc lợi: {job.newDetail.Welfare}</p>
-                    <p>Cập nhật: {job.newDetail.updateAt}</p>
-                    <button>Lưu việc làm</button>
-                </div>
             </div>
-            ))}
-        
-
-        </div> */}
+            <div class="p-5 gap-2 col-6 d-md-flex mx-auto">
+                <button class="btn circle" type="button">1</button>
+                <button class="btn circle " type="button">2</button>
+                <button class="btn circle " type="button">3</button>
+                <button class="btn circle " type="button"><i class="bi bi-chevron-right"></i></button>
+            </div>
         </div>
     );
 }

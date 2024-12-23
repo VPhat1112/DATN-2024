@@ -30,7 +30,9 @@ module.exports = {
         type: Sequelize.STRING
       },
       status: {
-        type: Sequelize.STRING
+        type: Sequelize.ENUM("activate", "lock"), 
+        defaultValue: "activate", 
+        allowNull: false 
       },
       createdAt: {
         allowNull: false,

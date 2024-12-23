@@ -35,7 +35,20 @@ module.exports = {
         type: Sequelize.STRING
       },
       image: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT('long')
+      },
+      National: {
+        type: Sequelize.STRING
+      },
+      Nationality: {
+        type: Sequelize.STRING
+      },
+      Married: {
+        type: Sequelize.STRING,
+        defaultValue:  "Độc thân"
+      },
+      DateBirth: {
+        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,

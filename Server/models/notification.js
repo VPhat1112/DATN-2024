@@ -11,15 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      notification.belongsTo(models.seeker,{
-        foreignKey:"seekers_id",
-        as:"seeker"
+      notification.belongsTo(models.account,{
+        foreignKey:"account_id",
+        as:"account"
       })
     }
   }
   notification.init({
-    seekers_id: DataTypes.INTEGER,
-    notification_content: DataTypes.STRING
+    account_id: DataTypes.INTEGER,
+    notification_content: DataTypes.STRING,
+    status:DataTypes.ENUM("hidden", "visible")
   }, {
     sequelize,
     modelName: 'notification',

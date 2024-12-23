@@ -1,0 +1,30 @@
+.content-inner {
+    -webkit-transition: 0.2s ease-in-out all;
+    -o-transition: 0.2s ease-in-out all;
+    width: 100%;
+    margin-left: 0;
+    background: #e8effd;
+    transition: 0.2s ease-in-out all;
+}
+
+.widget {
+    background: #ffffff;
+}
+
+.widget-10 {
+    margin-bottom: 40px;
+    padding: 15px;
+}
+
+.widget-10 .widget-body .content {
+    margin-bottom: 20px;
+    color: #5d677a;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.widget-10 .widget-body .table {
+    padding-bottom: 15px;
+    overflow-x: auto;
+}
+

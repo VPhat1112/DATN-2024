@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import googleLogo from '../../assets/images/google-logo.svg';
 import Login from './../Employer/Login';
 import {Link, useNavigate}   from "react-router-dom";
 import axios from "../../axios";
 import Swal from "sweetalert2";
+import { GoogleLogin } from "@react-oauth/google";
+import { AuthContext } from '../../context/AuthContext';
 
 function SignUp(props) {
     const[inputs,setInputs]=useState({
@@ -13,28 +15,32 @@ function SignUp(props) {
         lastName:"",
         SDT:""
     })
+    const {loginGoogle} =useContext(AuthContext);
 
     const navigate = useNavigate()
 
     // const [err,setError] = useState(null)
-    // const [isShowPassword, setIsShowPassword] = useState(false);
+    const [isShowPassword, setIsShowPassword] = useState(false);
 
     // console.log(inputs)
 
     const handleChange = e =>{
         setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     } 
-    // const handleKeyDown = (event) => {
-    //     if (event.key === "Enter") {
-    //         handleSignUpUSer();
-    //     }
-    // };
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            handleSignUpUSer();
+        }
+    };
 
     const handleSubmitSignUp = async (e) =>{
         e.preventDefault();
         try {
             const res = await axios.post("/user/register",inputs)
+            Swal.fire("Đăng ký thành công!", "Bạn đã đăng ký là 1 người tìm việc thành công. Hãy kiểm tra mail để xác nhận", "success");
             navigate('/LoginSeeker')
+            setLoading(false)
+            
 
         } catch (error) {
             Swal.fire("Oops!", error.response.data, "error");
@@ -43,12 +49,38 @@ function SignUp(props) {
         }
         
     }
-    // const handleShowHidePassword = () => {
-    //     setIsShowPassword(!isShowPassword);
-    // };
+    const handleShowHidePassword = () => {
+        setIsShowPassword(!isShowPassword);
+    };
 
     // console.log(inputs);
 
+
+    const handleSignInGoogle =async(res) => {
+            try {
+                // console.log(res.credential)
+                const result = await loginGoogle(res.credential);
+                console.log(result.data);
+                if(result.data.userData.role=="R0"){
+                    Swal.fire("Warning!", res.data.mes, "warning");
+                    
+                    navigate("/admin-DashBoard")
+                    setLoading(true)
+                }else if(result.data.userData.role=="R2"){
+                    navigate("/HomeSeeker")
+                }else{
+                    Swal.fire("Warning!", "Bạn không có quyền truy cập ở đây, có lẽ bạn đã đăng ký cho gmail này 1 quyền khác", "warning");
+                }
+                // alert(result)
+                // navigate("/HomeSeeker")
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        const handleError = (res)=>{
+            alert(res)
+        }
+    
 
     return (
         <div className='container-fluid'>
@@ -99,11 +131,11 @@ function SignUp(props) {
                     name='Passwords'
                     onChange={handleChange}/>
                 </div>
-                {/* <div class="mb-3 form-check">
+                <div class="mb-3 form-check">
                     <input
                         type="checkbox"
                         onClick={
-                        handleShowHidePassword()
+                        ()=>handleShowHidePassword()
                         }
                         onKeyDown={handleKeyDown}
                         class="form-check-input"
@@ -112,7 +144,7 @@ function SignUp(props) {
                     <label class="form-check-label" for="exampleCheck1">
                         Show Password
                     </label>
-                </div> */}
+                </div>
                 <div class="col-12">
                     <div class="mb-3">
                         <span className='text-center'>
@@ -128,8 +160,7 @@ function SignUp(props) {
                 <hr/>
                 <div class="col-12 d-grid">
                     <button  type="button" class="google-button ">
-                        <img src={googleLogo} alt="Google Logo" class="google-logo"/>
-                        <span class="google-text text-center">Google</span>
+                        <GoogleLogin onSuccess={handleSignInGoogle} onError={handleError}></GoogleLogin>
                     </button>   
                 </div>
             </form>

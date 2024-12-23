@@ -2,45 +2,52 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('news', {
-      news_id: {
+    await queryInterface.createTable('Information_Jobs', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      Company_id: {
+      seeker_id: {
         type: Sequelize.INTEGER,
         allowNull:false,
         onDelete : 'CASCADE',
         onUpdate: 'CASCADE',
         references:{
-          model:'Companies',
+          model:'seekers',
           key:'id'
         }
       },
-      Job_name: {
+      Desired_level: {
         type: Sequelize.STRING
       },
-      number_CV: {
-        type: Sequelize.INTEGER
+      Salary: {
+        type: Sequelize.STRING
       },
-      date_expiration: {
-        type: Sequelize.DATE
+      type_Work: {
+        type: Sequelize.STRING
+      },
+      work_methods: {
+        type: Sequelize.STRING
+      },
+      Industry: {
+        type: Sequelize.STRING
+      },
+      Workplace: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
-        type: "TIMESTAMP",
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: "TIMESTAMP",
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('news');
+    await queryInterface.dropTable('Information_Jobs');
   }
 };

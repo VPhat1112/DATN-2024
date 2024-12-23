@@ -4,7 +4,8 @@ import googleLogo from "../../assets/images/google-logo.svg";
 import axios from "../../axios";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../context/AuthContext";
-function Login(props) {
+import { GoogleLogin } from "@react-oauth/google";
+function Login() {
 
     const[inputs,setInputs]=useState({
         email:"",
@@ -13,7 +14,7 @@ function Login(props) {
 
     const navigate = useNavigate()
 
-    const {loginCompany} =useContext(AuthContext);
+    const {loginCompany,loginGoogle} =useContext(AuthContext);
 
     const handleChange = e =>{
         setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -27,12 +28,44 @@ function Login(props) {
             const res = await loginCompany(inputs)
             console.log(res)
             // dispatch(actions.userLoginSuccess(res.userData));
-            navigate("/HomeEmployer")
+            if(res.data.userData.role=="R0"){
+                Swal.fire("Warning!", res.data.mes, "warning");
+                
+                navigate("/admin-DashBoard")
+                setLoading(true)
+            }else{
+                navigate("/HomeEmployer")
+            }
         } catch (error) {
             Swal.fire("Oops!", error.response.data.mes, "error");
             setLoading(false)
         }
         
+    }
+
+    const handleSignInGoogle =async(res) => {
+        try {
+            // console.log(res.credential)
+            const result = await loginGoogle(res.credential);
+            // console.log(result);
+            if(result.data.userData.role=="R0"){
+                Swal.fire("Warning!", result.data.mes, "warning");
+                
+                navigate("/admin-DashBoard")
+                setLoading(true)
+            }else if(result.data.userData.role=="R3"){
+                navigate("/HomeEmployer")
+            }else{
+                Swal.fire("Warning!", "Bạn không có quyền truy cập ở đây, có lẽ bạn đã đăng ký cho gmail này 1 quyền khác", "warning");
+            }
+            // alert(result)
+            // navigate("/HomeSeeker")
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const handleError = (res)=>{
+        alert(res)
     }
 
     return (
@@ -83,14 +116,13 @@ function Login(props) {
             <hr />
             <div class="mb-3">
             <span className="text-center">
-                Do you have a account? <Link to={"/SignUpSeeker"}> SignUp </Link>
+                Do you have a account? <Link to={"/SignUpEmployer"}> SignUp </Link>
             </span>
             </div>
 
             <div class="mb-3 d-grid">
             <button  type="button" class="google-button ">
-                <img src={googleLogo} alt="Google Logo" class="google-logo" />
-                <span class="google-text text-center">Google</span>
+                <GoogleLogin onSuccess={handleSignInGoogle} onError={handleError}></GoogleLogin>
             </button>
             </div>
         </form>

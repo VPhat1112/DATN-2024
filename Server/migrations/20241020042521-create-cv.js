@@ -25,6 +25,15 @@ module.exports = {
       Career_goal: {
         type: Sequelize.STRING
       },
+      title: {
+        type: Sequelize.STRING
+      },
+      sumary: {
+        type: Sequelize.STRING
+      },
+      color: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: "TIMESTAMP",

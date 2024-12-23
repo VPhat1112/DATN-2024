@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class account extends Model {
     /**
@@ -15,8 +13,9 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey:"account_id",
         targetKey:"account_id"
       });
-
-
+      account.hasMany(models.notification,{
+        foreignKey:"account_id",
+      });
       account.hasOne(models.Company,{
         foreignKey:"account_id",
         targetKey:"account_id"
@@ -32,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     tokenUser: DataTypes.STRING,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
-    status: DataTypes.STRING,
+    status: DataTypes.ENUM("activate","lock"),
     otp_expiration:DataTypes.DATE
   }, {
     sequelize,

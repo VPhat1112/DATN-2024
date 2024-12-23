@@ -9,10 +9,23 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      cv_id: {
-        type: Sequelize.INTEGER
+      seeker_id: {
+        type: Sequelize.INTEGER,
+        allowNull:false,
+        onDelete : 'CASCADE',
+        onUpdate: 'CASCADE',
+        references:{
+          model:'seekers',
+          key:'id'
+        }
       },
       Skill_name: {
+        type: Sequelize.STRING
+      },
+      description: {
+        type: Sequelize.STRING
+      },
+      certificate: {
         type: Sequelize.STRING
       },
       createdAt: {

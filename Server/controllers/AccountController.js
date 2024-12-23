@@ -4,6 +4,7 @@ import { internalServerError, badRequest } from "../middleware/handdle_error";
 import { email, Passwords } from "../helpers/joi_schema";
 import Joi from "joi";
 import jwt from "jsonwebtoken";
+import { updateUser } from './../service/Account';
 
 export const registerUser = async (req, res) => {
   try {
@@ -69,10 +70,11 @@ export const registerUser = async (req, res) => {
 export const registerCompany = async (req, res) => {
   try {
     // Validate input data
-    const { email, Passwords, nameCompany, typeCompany, numberEmployees,National,Address,Company_description,contactPerson,phoneContact } = req.body;
-    if (!email || !Passwords || !nameCompany || !typeCompany || !numberEmployees || !National || !Address || !Company_description || !contactPerson || !phoneContact) {
+    const { email, Passwords, nameCompany, typeCompany, numberEmployees,National,Address,Company_description,contactPerson,phoneContact,image} = req.body;
+    console.log(image)
+    if (!email || !Passwords  || !nameCompany || !typeCompany || !numberEmployees || !National || !Address || !Company_description || !contactPerson || !phoneContact||!image) {
       return res.status(400).json(
-        "Missing inputs"
+        "Bạn đã nhập thiếu gì đó"
       );
     }
 
@@ -101,7 +103,8 @@ export const registerCompany = async (req, res) => {
       Address,
       Company_description,
       contactPerson,
-      phoneContact
+      phoneContact,
+      image
     });
 
     // If user creation is successful, send verification email and schedule deletion
@@ -166,11 +169,13 @@ export const getCurrent = async (req, res) => {
 
 export const forgotPassword = async (req, res) => {
   try {
-    const { email } = req.body;
+    const {email} = req.body;
     const token = Math.floor(Math.random() * 900000) + 100000;
-    if (!email) throw new Error("Missing email");
+    if (!email) return res.status(200).json(response);
     const response = await services.forgotPassword(email,token);
+    
     return res.status(200).json(response);
+    
   } catch (error) {
     console.log(error);
     return internalServerError(res);
@@ -180,7 +185,8 @@ export const forgotPassword = async (req, res) => {
 export const resetPassword = async (req, res) => {
   try {
     const { newPassword, token,email } = req.body;
-    if (!newPassword || !token || !email) throw new Error("Missing input");
+    console.log(req.body)
+    if (!newPassword || !token || !email) return res.status(400).json(response);
     const response = await services.resetPassword(email, token,newPassword );
     return res.status(200).json(response);
   } catch (error) {
@@ -199,7 +205,7 @@ export const loginSeeker = async (req, res) => {
     if(response.err===1){
       return res.status(400).json(response);
     }
-    console.log(response.userData.id)
+    // console.log(response.userData.id)
     const token =jwt.sign({id:response.userData.id,role:response.userData.role}, 'jwtKey');
     console.log(token)
 
@@ -254,8 +260,23 @@ export const loginCompany = async (req, res) => {
 
 export const LoginGoogle = async (req, res) => {
   try {
-    let response = await services.handleLoginGoogle(req.body);
-    return res.status(200).json(response);
+    const {tokenID} = req.body; 
+    // console.log(tokenID)
+    let response = await services.handleLoginGoogle(tokenID);
+
+    const token =jwt.sign({id:response.userData.id,role:response.userData.role}, 'jwtKey');
+    console.log(token)
+
+    if(response.err===1){
+      return res.status(400).json(response);
+    }
+    res.cookie("access_token_Company", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        withCredentials: true
+    })
+    .status(200)
+    .json(response)
   } catch (error) {
     console.log(error);
     return internalServerError(res);
@@ -268,3 +289,29 @@ export const Logout = async(req,res) =>{
     secure:true
   }).status(200).json("user has been logout")
 }
+
+export const UpdateUser = async(req,res) =>{
+  try {
+    const body = req.body;
+    const {userId} = req.params;
+    const response = await services.updateUser(userId,body);
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    return internalServerError(res);
+  }
+}
+
+export const UpdateUserSeeker = async(req,res) =>{
+  try {
+    // const body = req.body;
+    console.log(req.body)
+    const {userId} = req.params;
+    const response = await services.updateUserSeeker(userId,req.body);
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    return internalServerError(res);
+  }
+}
+

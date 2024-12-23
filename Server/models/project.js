@@ -11,12 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      project.belongsTo(models.seeker,{
+        foreignKey:"seeker_id",
+      })
     }
   }
   project.init({
-    cv_id:DataTypes.INTEGER,
+    seeker_id:DataTypes.INTEGER,
     Project_name: DataTypes.STRING,
-    Project_git: DataTypes.STRING
+    description:DataTypes.STRING,
+    Project_git: DataTypes.STRING,
+    start_date:DataTypes.DATE,
+    end_date:DataTypes.DATE
   }, {
     sequelize,
     modelName: 'project',

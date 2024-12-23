@@ -5,7 +5,7 @@ import googleOneTap from "google-one-tap";
 import { AuthContext } from '../../../context/AuthContext';
 function NavBar(props) {
     const {currentCompany,logoutUSer} =useContext(AuthContext);
-
+    // console.log(currentCompany)
     return (
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
@@ -21,16 +21,18 @@ function NavBar(props) {
                 <a class="nav-link active" aria-current="page" href="/HomeEmployer">Home</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="#">Đăng tin tuyển dụng</a>
+                <a class="nav-link" href="/ProfileEml/Jobs">Đăng tin tuyển dụng</a>
                 </li>
             </ul>
             <form class="d-flex" >
-                {currentCompany?<span className='me-2 mb-2 mb-lg-0 txt-user'>{currentCompany?.nameCompany}</span>:<span className='me-2 mb-2 mb-lg-0 txt-user'><Link className='link' to={"/LoginEmployer"}>Đăng nhập</Link></span>}
+                {currentCompany?<span className='me-2 mb-2 mb-lg-0 txt-user'><a href='/ProfileEml/EmlProfile'>
+                {currentCompany?.Company.nameCompany}
+                </a></span>:<span className='me-2 mb-2 mb-lg-0 txt-user'><Link className='link' to={"/LoginEmployer"}>Đăng nhập</Link></span>}
                 {currentCompany?<span onClick={logoutUSer} className='me-2 mb-2 mb-lg-0 txt-user'><Link>Logout</Link></span>:<span className='me-2 mb-2 mb-lg-0 txt-user'><Link className='link' to={"/SignUpEmployer"}>Đăng ký</Link></span>}
                 
                 
                 <div className='main-employer me-2'>
-                    <a href='/LoginSeeker' title='Đăng tuyển , tìm ứng viên'>
+                    <a href='/LoginSeeker' onClick={logoutUSer} title='Đăng tuyển , tìm ứng viên'>
                         <div>
                             <div className='bck-employer'>
                                 Dành cho ứng viên

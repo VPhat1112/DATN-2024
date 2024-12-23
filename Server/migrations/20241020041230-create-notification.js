@@ -3,24 +3,29 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('notifications', {
-      Notification_id: {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      seekers_id: {
+      account_id: {
         type: Sequelize.INTEGER,
         allowNull:false,
         onDelete : 'CASCADE',
         onUpdate: 'CASCADE',
         references:{
-          model:'seekers',
+          model:'accounts',
           key:'id'
         }
       },
       notification_content: {
         type: Sequelize.STRING
+      },
+      status: {
+        type: Sequelize.ENUM("hidden", "visible"), 
+        defaultValue: "visible", 
+        allowNull: false 
       },
       createdAt: {
         allowNull: false,

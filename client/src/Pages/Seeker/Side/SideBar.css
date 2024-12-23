@@ -1,0 +1,36 @@
+li{
+    list-style: none;
+}
+.collapse{
+    position: relative;
+}
+
+/* a.active {
+    background: #FF2458;
+} */
+
+.list-unstyled {
+    max-height: calc(100vh - 220px);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+li a.collapse::before {
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -webkit-transition: 0.2s ease-in-out all;
+    -o-transition: 0.2s ease-in-out all;
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.8);
+    font-family: "Material Design Icons";
+    font-size: 24px;
+    content: "\f142";
+    transition: 0.2s ease-in-out all;
+}
+
+li .activate {
+    background-color: brown;
+}

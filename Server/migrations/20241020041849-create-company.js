@@ -43,6 +43,9 @@ module.exports = {
       phoneContact: {
         type: Sequelize.STRING
       },
+      image: {
+        type: Sequelize.TEXT('long')
+      },
       createdAt: {
         allowNull: false,
         type: "TIMESTAMP",

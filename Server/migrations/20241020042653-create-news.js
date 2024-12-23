@@ -2,15 +2,32 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('numberspecia', {
+    await queryInterface.createTable('news', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      Specialized_id: {
-        type: Sequelize.INTEGER
+      Company_id: {
+        type: Sequelize.INTEGER,
+        allowNull:false,
+        onDelete : 'CASCADE',
+        onUpdate: 'CASCADE',
+        references:{
+          model:'Companies',
+          key:'id'
+        }
+      },
+      Job_name: {
+        type: Sequelize.STRING
+      },
+      numberCV: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
+      date_expiration: {
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
@@ -25,6 +42,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('numberspecia');
+    await queryInterface.dropTable('news');
   }
 };

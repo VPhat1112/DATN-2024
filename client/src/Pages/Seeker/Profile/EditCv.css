@@ -1,0 +1,262 @@
+.profileText{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.profileText .imgBx{
+    position: relative;
+    width: 120px;
+    height: 120xp;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.profileText .imgBx img {
+    position:absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profileText h2{
+    color: #fff;
+    font-size: 15px;
+    margin-top: 20px;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 600;
+    line-height: 1.4em;
+}
+
+.profileText span{
+    color: #fff;
+    font-size: 0.8em;
+    font-weight: 300;
+}
+.link-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.uploadImg{
+    text-decoration: none;
+}
+
+.uploadImg:hover{
+    text-decoration: underline;
+}
+
+.add-button {
+    background-color: #3b5998; /* Facebook blue */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .add-button .icon {
+    font-size: 20px;
+    margin-right: 10px;
+  }
+
+/* item cv */
+.widget {
+    background: #ffffff;
+}
+
+.widget-24 {
+    padding: 30px;
+    margin-top: 40px;
+}
+
+.widget .widget-head {
+    position: relative;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+
+.widget .widget-head .cb-title-h3{
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+}
+
+.widget-24 .widget-head .figure {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+}
+
+.figure {
+    margin: 0;
+}
+
+.widget-head .right-action .tips {
+    margin-right: 25px;
+    cursor: pointer;
+}
+
+
+
+.widget .widget-head .cb-title-h3 .right-action {
+    justify-content: flex-end;
+}
+
+.link-edit{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border: 1px solid #2f4ba0;
+    border-radius: 20px;
+    text-decoration: none;
+}
+
+.error{
+    color: red;
+}
+
+.success{
+    color: green;
+}
+
+.hidden{
+    display: none;
+}
+
+table {
+    border-bottom: none;
+}
+
+table {
+    border-collapse: collapse;
+}
+td, th {
+    border-bottom: none;
+    padding: 20px;
+}
+
+.widget-24 .widget-head .figure .image {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.widget-24 .widget-head .figcaption {
+    padding-left: 20px;
+}
+
+.figcaption{
+    display: block;
+}
+
+.widget-24 .widget-body {
+    padding: 20px 0;
+}
+
+.dets{
+    background-color: #ffffff;
+}
+
+.range-labels {
+    margin: 18px -35px 0;
+    padding: 0;
+    list-style: none;
+}
+
+.progress-bar-labels {
+    position: absolute;
+    width: 97%;
+    display: flex;
+    justify-content: space-between; 
+}
+
+.progress-bar-labels span {
+    font-size: 12px;
+    color: #666;
+}
+
+.progress-bar-labels span.activate{
+    font-size: 12px;
+    color: #ff0000;
+}
+
+.progress-bar-labels-skill {
+    position: absolute;
+    width: 97%;
+    display: flex;
+    justify-content: space-between; 
+}
+
+.progress-bar-labels-skill span {
+    font-size: 12px;
+    color: #666;
+}
+
+.progress-bar-labels-skill span.activate{
+    font-size: 12px;
+    color: #ff0000;
+}
+
+td{
+    font-weight: bold;
+}
+/* .Exp{
+    width: 300px;
+} */
+
+.sticker ul {
+    list-style-type: none;
+}
+
+.list-sticker .item {
+    position: relative;
+    padding: 20px;
+    padding-top: 0;
+}
+
+.sticker .list-sticker .item::before {
+    z-index: 0;
+    position: absolute;
+    top: -2px;
+    left: -4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #2f4ba0;
+    content: "";
+}
+.sticker .list-sticker .item{
+	border-left: 1px solid var(--green);
+}
+
+.sub-title{
+    font-size: 14.5px;
+}

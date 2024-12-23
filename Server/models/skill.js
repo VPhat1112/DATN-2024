@@ -11,11 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      skill.belongsTo(models.seeker,{
+        foreignKey:"seeker_id",
+      })
     }
   }
   skill.init({
-    cv_id:DataTypes.INTEGER,
-    Skill_name: DataTypes.STRING
+    seeker_id:DataTypes.INTEGER,
+    Skill_name: DataTypes.STRING,
+    description: DataTypes.STRING,
+    certificate: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'skill',

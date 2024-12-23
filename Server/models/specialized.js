@@ -1,3 +1,4 @@
+
 'use strict';
 const {
   Model
@@ -10,13 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      specialized.hasMany(models.new_spe)
       // define association here
     }
   }
   specialized.init({
     Specialized_name: DataTypes.STRING,
     Specialized_description: DataTypes.STRING,
-    Specialized_image: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'specialized',

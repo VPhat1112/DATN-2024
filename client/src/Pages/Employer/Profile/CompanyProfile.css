@@ -1,0 +1,23 @@
+.content {
+    display: none; 
+}
+
+#Information  {
+    display: block;
+}
+.activeProfile {
+    background-color: white;  
+}
+
+.inputtext{
+    background-color: white;
+}
+
+
+input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    background: rgb(255, 255, 255);
+    border-radius: 5px;
+    width: 100%;
+}

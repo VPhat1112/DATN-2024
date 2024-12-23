@@ -9,14 +9,30 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      cv_id: {
-        type: Sequelize.INTEGER
+      seeker_id: {
+        type: Sequelize.INTEGER,
+        allowNull:false,
+        onDelete : 'CASCADE',
+        onUpdate: 'CASCADE',
+        references:{
+          model:"seekers",
+          key:"id"
+        }
       },
-      experience_name: {
+      job_title: {
         type: Sequelize.STRING
       },
-      experience_year: {
-        type: Sequelize.INTEGER
+      company: {
+        type: Sequelize.STRING
+      },
+      start_date: {
+        type: Sequelize.DATE
+      },
+      end_date: {
+        type: Sequelize.DATE
+      },
+      description: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

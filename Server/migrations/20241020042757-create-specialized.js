@@ -15,9 +15,6 @@ module.exports = {
       Specialized_description: {
         type: Sequelize.STRING
       },
-      Specialized_image: {
-        type: Sequelize.TEXT
-      },
       createdAt: {
         allowNull: false,
         type: "TIMESTAMP",

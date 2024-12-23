@@ -11,12 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      language.belongsTo(models.seeker,{
+        foreignKey:"seeker_id",
+      })
     }
   }
   language.init({
-    cv_id:DataTypes.INTEGER,
+    seeker_id:DataTypes.INTEGER,
     language_name: DataTypes.STRING,
-    language_year: DataTypes.INTEGER
+    proficiency : DataTypes.STRING,
+    certificate: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'language',
